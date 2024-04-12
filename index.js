@@ -71,6 +71,35 @@ app.use(express.json())
 //   }
 // })
 
+const order1 = {
+  type: 'order',
+  _id: 1,
+  leveranstid: '2024T11:40:00',
+  price: 122,
+  uid: undefined,
+}
+const order2 = {
+  type: 'order',
+  _id: 2,
+  leveranstid: '2024T11:40:00',
+  price: 122,
+  uid: 'xxx',
+}
+const order14 = {
+  type: 'order',
+  _id: 14,
+  leveranstid: '2024T11:40:00',
+  price: 123,
+  uid: 'xxx',
+}
+
+const user = { type: 'user', _id: 3, name: 'aaa', orderHistory: [2, 14] }
+// user /  orders /
+// Sök efter alla ordrar som har uid xxx
+
+// bean /  status
+// Sök igenom användarna till du hitta ngn med rätt ordernummer
+
 app.get('/', async (req, res) => {
   // Find all documents in the collection
   //Här kan vi använda type om vi vill hitta något av en särskild typ.
