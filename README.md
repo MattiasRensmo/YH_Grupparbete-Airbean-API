@@ -35,7 +35,7 @@
 
 - `/api/beans/order`
 - METHOD: POST
-- AUTH: JWT (optional)
+- UID: ID (optional)
 
 ### PAYLOAD
 
@@ -128,7 +128,8 @@ JSON
 
 ```
 {
-  "username": "mattias",
+  "fullName": "Mattias Rensmo"
+  "username": "mattias@rensmo.se",
   "password": "losen"
 }
 ```
@@ -140,7 +141,7 @@ JSON
 ```
 {
   "status": "success"
-  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNjQxNzE0Ni0xZWIwLTQ3MzAtOWE4NC01ZDdiYjI4YzY5ZTgiLCJpYXQiOjE3MDk4NDcyNzUsImV4cCI6MTcwOTg0OTA3NX0.VfuSnmRnVnbJNv1sPbaoqWvd7ivPeEEA8GbHTcQsVgo"
+  "UID": "eyJhbGciOiJ"
 }
 ```
 
@@ -185,7 +186,7 @@ JSON
 ```
 {
   "status": "success"
-  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNjQxNzE0Ni0xZWIwLTQ3MzAtOWE4NC01ZDdiYjI4YzY5ZTgiLCJpYXQiOjE3MDk4NDcyNzUsImV4cCI6MTcwOTg0OTA3NX0.VfuSnmRnVnbJNv1sPbaoqWvd7ivPeEEA8GbHTcQsVgo"
+  "UID ": "eyJhbGciO"
 }
 ```
 
@@ -202,7 +203,7 @@ JSON
 
 - `/api/user/history`
 - METHOD: GET
-- AUTH: JWT
+- UID: "5w4kljh234k"
 
 ### SUCCESS: JSON
 
@@ -228,6 +229,7 @@ JSON
 }
 ```
 
+<!--
 ## Check JWT
 
 - `/api/user/status`
@@ -249,4 +251,4 @@ JSON
   "status": "error"
   "error": "Token är inte giltig"
 }
-```
+``` -->
