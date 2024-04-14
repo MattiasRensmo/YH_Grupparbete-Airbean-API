@@ -2,6 +2,7 @@
 
 const express = require('express')
 const nedb = require('nedb-promise')
+const beans = require('./Routes/Beans')
 
 const db = new nedb({ filename: 'database.db', autoload: true })
 
@@ -10,6 +11,19 @@ const PORT = 5000
 
 app.use(express.json())
 
+// ROUTES
+app.use('/api/beans', beans)
+
+//The 404 Route (ALWAYS Keep this as the last route)
+app.get('*', (req, res) => {
+  res.sendStatus(404)
+})
+
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+
+// ! DB-BÖS VI KANSKE BEHÖVER
+
+/* 
 // var menu = {
 //   type: 'menu',
 //   menu: [
@@ -109,5 +123,4 @@ app.get('/', async (req, res) => {
   console.log(dbRes)
   res.send(dbRes)
 })
-
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+ */
