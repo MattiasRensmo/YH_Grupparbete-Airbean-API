@@ -209,5 +209,5 @@ const user = {
   type: 'user',
   password: 'hemligtHashLosen',
   username: 'mattias',
-  _id: 'xpkjZjEDFTRN0D5u',
+  _id: 'abc123',
 }
