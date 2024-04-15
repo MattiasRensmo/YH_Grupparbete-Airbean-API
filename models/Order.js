@@ -2,7 +2,9 @@ const nedb = require('nedb-promise')
 const db = new nedb({ filename: 'database.db', autoload: true })
 
 const GetOrderByID = async id => {
-  const dbEntry = await db.findOne({ _id: id })
+  // const dbEntry = await db.findOne({ _id: id })
+  const dbEntry = await db.find({ type: 'order', customer: 'abc123' })
+  console.log(dbEntry)
   return dbEntry
 }
 

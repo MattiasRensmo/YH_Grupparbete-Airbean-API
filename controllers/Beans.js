@@ -38,6 +38,9 @@ function GetMenuItemById(id) {
       title: 'Bryggkaffe',
       desc: 'Bryggd på månadens bönor.',
       price: 39,
+      applicablePromotion: true,
+      discountedPrice: 30,
+      comboPrice: [3, 25],
     },
     {
       id: 2,
@@ -120,6 +123,8 @@ PlaceCoffeeOrder = (req, res) => {
       })
       return
     }
+
+    // const priceAfterDiscount = applyDiscount(id)
 
     let itemTotalPrice = price * amount
 
