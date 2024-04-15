@@ -43,7 +43,6 @@ JSON
 
 ```
 {
-  "details": {
     "order": [
       {
         "id": 1,
@@ -56,7 +55,6 @@ JSON
         "amount": 2
       }
     ]
-  }
 }
 ```
 
