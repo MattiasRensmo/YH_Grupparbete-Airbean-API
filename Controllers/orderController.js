@@ -2,14 +2,14 @@
 const Order = require("../Models/Order")
 
 exports.placeOrder = async (req, res) => {
+    
+    // Från frontend...
     // const orderData = {
-    //     type: "order",
-    //     orderNumber: 123,
+    //     userID: "123ABC"
     //     products: [
     //         {productID: 1, quantity: 1, price: 49},
     //         {productID: 2, quantity: 2, price: 49}
     //     ],
-    //     userID: "123ABC"
     // }
 
     try {
@@ -28,10 +28,6 @@ exports.getOrderHistory = async (req, res) => {
         const userID = req.params.userID
 
         const orderHistory = await Order.getOrderHistory(userID)
-
-        if (!orderHistory || orderHistory.length === 0) {
-            return res.status(404).json({success: false, message: `No orders found for user ${userID}`})
-        }
 
         return res.status(200).json({success: true, orderHistory: orderHistory})
 

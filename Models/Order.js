@@ -32,6 +32,10 @@ const getOrderHistory = async (userID) => {
         const orderHistory = await db.find({ type: "order", userID: userID}, { orderDate: 1, totalPrice: 1, _id: 0 })
         console.log(orderHistory)
 
+        if (!orderHistory) {
+            return res.status(404).json({success: false, message: "No orders found" })
+        }
+
         return orderHistory
     } catch (error) {
         console.error("Failed to retrieve order history", error)
