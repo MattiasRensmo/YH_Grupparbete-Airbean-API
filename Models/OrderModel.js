@@ -17,7 +17,7 @@ const getOrderHistory = async userID => {
   try {
     const orderHistory = await db.find(
       { type: 'order', customer: userID },
-      { delivery: 1, price: 1, _id: 0 }
+      { orderDate: 1, price: 1, _id: 0 }
     )
     console.log(orderHistory)
 

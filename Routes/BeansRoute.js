@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const { CheckOrderId, PlaceCoffeeOrder } = require('../controllers/Beans')
+const {
+  CheckOrderId,
+  PlaceCoffeeOrder,
+} = require('../controllers/BeansController')
 
 //Frågetecknet nedan gör att vi använder denna route även om det saknas ett orderID
 router.get('/order/status/:orderId?', CheckOrderId)

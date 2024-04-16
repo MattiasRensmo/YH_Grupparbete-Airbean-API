@@ -1,6 +1,6 @@
 const express = require('express')
-const beans = require('./Routes/Beans') //Mattias
-const user = require('./Routes/User') //Kristofer
+const beans = require('./Routes/BeansRoute') //Mattias
+const user = require('./Routes/UserRoute') //Kristofer
 
 const app = express()
 const PORT = 5000

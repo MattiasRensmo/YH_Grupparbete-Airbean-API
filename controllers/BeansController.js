@@ -1,4 +1,4 @@
-const { GetOrderByID, CreateOrder } = require('../models/Order')
+const { GetOrderByID, CreateOrder } = require('../models/OrderModel')
 const moment = require('moment')
 moment.locale('sv')
 
@@ -147,6 +147,7 @@ PlaceCoffeeOrder = (req, res) => {
     CreateOrder({
       type: 'order',
       delivery: moment().add(waitTime, 'minutes'),
+      orderDate: moment().format('YYYY-MM-DD'),
       price: orderTotalPrice,
       customer: body.customer || null,
     })

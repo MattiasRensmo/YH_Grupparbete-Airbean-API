@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const user = require('../controllers/user')
+const user = require('../controllers/UserController')
 
 // // Placera en order
 // router.post("/order", orderController.placeOrder)
