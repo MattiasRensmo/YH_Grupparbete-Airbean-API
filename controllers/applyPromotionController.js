@@ -1,22 +1,29 @@
-const { addPromotionData, deleteMistake, addRightMenu, applyPromotion } = require("../models/applyPromotionModel");
+const { applyPromotion } = require("../models/applyPromotionModel");
 
-exports.updatePromotionData = async (req, res) => {
-  try {
-    const updatedData = await addPromotionData();
-    res.status(200).json(updatedData);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: "Error" });
-  }
-};
 
 exports.useApplyPromotion = async (req, res) => {
   try {
     const checkout = req.body.checkout;
     const promotionResult = await applyPromotion(checkout);
-    res.status(200).json(promotionResult);
+    res.status(200).json({
+      status: "success",
+      promotionResult
+    });
   } catch (error) {
-    console.error("Error applying promotion:", error);
-    res.status(500).json({ error: "Error applying promotion", message: error.message });
+    res.status(500).json({
+      status: "error",
+      error: "Kampanjen kunde inte tillämpas!",
+      message: error.message 
+    });
   }
-};
+  };
+
+
+  /*---- för att fungera---- */
+//lägg till "combo"-nyckeln till produkterna (t.ex. "combo" : [3, 4] eller [])
+//lägg till activePromotion=true (eller false)
+//endpoint /order accepterar discountedPrice om "promotionApplied": true (måste bli accepterad som body parameter)
+
+  /*--------- best of the best if----- */
+//order accepteras som frivilliga parameter i body:n även totalDiscount
+//orderHistorik accepteras som frivilliga parameter i body:n även totalDiscount

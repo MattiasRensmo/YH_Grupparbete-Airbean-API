@@ -1,31 +1,34 @@
-const { getMenu, getProduct } = require ("../models/menuModel");
+const { getMenu, getProduct } = require("../models/menuModel");
 
 exports.getAllMenuItems = async (req, res) => {
   try {
-      const menuItems = await getMenu();
-      res.status(200).json({
-        status: "success",
-        menu: menuItems
-      });
-      
-    } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({ error: "Error" });
-    }
+    const menuProducts = await getMenu();
+    res.status(200).json({
+      status: "success",
+      menu: menuProducts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      error: "Något gick fel, försök igen senare.",
+      message: error.message 
+    });
   }
-  
+};
 
 exports.getProductById = async (req, res) => {
   try {
-    const productId = req.params.id; 
+    const productId = req.params.id;
     const product = await getProduct(productId);
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: "Produkten hittades inte!" });
     }
     res.status(200).json(product);
-
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: "Error" });
+    res.status(500).json({
+      status: "error",
+      error: "Något gick fel, försök igen senare.",
+      message: error.message 
+    });
   }
 };

@@ -1,9 +1,5 @@
 const { updatePromotionData, useApplyPromotion } = require("../controllers/applyPromotionController");
 
 exports.registerPromotionRoutes = (app) => {
-  app.post("/order/promotion", updatePromotionData);
+  app.post("/applyPromotion", useApplyPromotion);
 };
-exports.registerPromotionRoutes = (app) => {
-  app.post("/order/promotion", useApplyPromotion);
-};
-

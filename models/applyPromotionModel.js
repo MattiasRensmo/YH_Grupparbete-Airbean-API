@@ -1,11 +1,7 @@
 const nedb = require("nedb-promise");
-const express = require("express");
+
 const db = new nedb({ filename: "database.db", autoload: true });
 const bodyParser = require("body-parser");
-
-const app = express();
-
-app.use(bodyParser.json());
 
 async function applyPromotion(checkout) {
   try {
