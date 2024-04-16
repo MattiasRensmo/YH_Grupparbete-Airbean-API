@@ -3,14 +3,17 @@ const beans = require('./Routes/BeansRoute') //Mattias
 const user = require('./Routes/UserRoute') //Kristofer
 
 const app = express()
-const PORT = 5000
+const userRoutes = require('./routes/userRoutes')
+const orderRoutes = require('./routes/orderRoutes')
 
 app.use(express.json())
 
-app.use('/api/user', user) //Kristofer
-
 // ROUTES
 app.use('/api/beans', beans) //Mattias
+app.use('/api/user', user) //Kristofer
+
+app.use('/api/users', userRoutes) //Joel
+app.use('/api', orderRoutes) //Joel
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', (req, res) => {
