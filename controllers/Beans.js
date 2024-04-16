@@ -2,32 +2,12 @@ const { GetOrderByID, CreateOrder } = require('../models/Order')
 const moment = require('moment')
 moment.locale('sv')
 
-CheckOrderId = (req, res) => {
-  const id = req.params.orderId
-  console.log(id)
-  if (id) {
-    //Kolla vilken ETA vi har i databasen
-    GetOrderByID(id)
-      .then(data => {
-        // console.log('data', data)
-        res.json({
-          orderNum: data._id,
-          eta: moment(data.delivery).fromNow(true),
-        })
-      })
-      .catch(err => {
-        console.error(err)
-        res.status(404).json({
-          status: 'error',
-          error: 'Hittar inte ordernumret',
-        })
-      })
-  } else {
-    res.json(404).send({
-      status: 'error',
-      error: 'Hittar inte ordernumret',
-    })
+//Allmänna funktioner
+function calculateEta(etaTime) {
+  if (moment(etaTime).isAfter()) {
+    return moment(etaTime).fromNow()
   }
+  return 'Kaffet är levererat'
 }
 
 // FIXME Tillfällig funktion
@@ -38,9 +18,6 @@ function GetMenuItemById(id) {
       title: 'Bryggkaffe',
       desc: 'Bryggd på månadens bönor.',
       price: 39,
-      applicablePromotion: true,
-      discountedPrice: 30,
-      comboPrice: [3, 25],
     },
     {
       id: 2,
@@ -78,113 +55,125 @@ function GetMenuItemById(id) {
   return menu[idx]
 }
 
+CheckOrderId = async (req, res) => {
+  const id = req.params.orderId
+  try {
+    if (!id) {
+      throw {
+        status: 404,
+        message: 'Du måste ange ordernummer!',
+      }
+    }
+
+    //Kolla vilken ETA vi har i databasen
+    const data = await GetOrderByID(id)
+
+    if (data == null) {
+      throw {
+        status: 404,
+        message: 'Hittar inte ordernumret!!',
+      }
+    }
+    res.json({
+      orderNum: data._id,
+      // eta: moment(data.delivery).fromNow(),
+      eta: calculateEta(data.delivery),
+    })
+  } catch (error) {
+    //Hantera alla error på ett ställe
+    console.error(error)
+    res.status(error.status).json({
+      status: 'error',
+      error: error.message,
+    })
+  }
+}
+
 PlaceCoffeeOrder = (req, res) => {
-  console.log(req.body)
   const body = req.body
 
-  //Kolla att datan vi fått är bra
-  if (!('order' in body)) {
-    res.status(400).json({
-      status: 'error',
-      error: 'Formatera din beställning rätt!',
-    })
-    return
-  }
-
-  if (body.order.length < 1) {
-    res.status(400).json({
-      status: 'error',
-      error: 'Du måste beställa något!',
-    })
-    return
-  }
-
   let orderTotalPrice = 0
-  let orderTotalDiscount = 0
 
-  body.order.forEach(item => {
-    const { id, price, amount } = item
-
-    //TODO Skapa funktionen GetMenuItemById
-    const menuItem = GetMenuItemById(id)
-    if (!menuItem) {
-      res.status(404).json({
-        status: 'error',
-        error: 'Du kan bara beställa från menyn!',
-      })
-      return
+  try {
+    //Har vi fått en order?
+    if (!('order' in body)) {
+      throw {
+        status: 400,
+        message: 'Formatera din beställning rätt!',
+      }
     }
-    console.log(`Processing ${menuItem.title}`)
-
-    if (menuItem.price != price) {
-      res.status(400).json({
-        status: 'error',
-        error: 'Fuska inte med priset!',
-      })
-      return
+    //Finns det produkter i ordern?
+    if (body.order.length < 1) {
+      throw {
+        status: 400,
+        message: 'Du måste beställa något!',
+      }
     }
 
-    // const priceAfterDiscount = applyDiscount(id)
+    // Är varje produkt i ordern korrekt?
+    body.order.forEach(item => {
+      const { id, price, amount } = item
 
-    let itemTotalPrice = price * amount
+      //TODO Skapa funktionen GetMenuItemById
+      const menuItem = GetMenuItemById(id)
 
-    //10 % rabatt om man beställer tre eller fler av samma produkt
-    if (amount <= 3) {
-      orderTotalDiscount += itemTotalPrice * 0.1
-      itemTotalPrice -= itemTotalPrice * 0.1
-    }
+      //Finns produkten i menyn?
+      if (!menuItem) {
+        throw {
+          status: 404,
+          message: 'Du kan bara beställa från menyn!',
+        }
+      }
 
-    orderTotalPrice += itemTotalPrice
-  })
+      //Har produkten rätt pris
+      if (menuItem.price != price) {
+        throw {
+          status: 400,
+          message: 'Fuska inte med priset!',
+        }
+      }
 
-  //Lägg till en ETA
-  function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min)
-  }
-  const waitTime = rand(15, 45)
-
-  //Spara till DB
-  CreateOrder({
-    type: 'order',
-    delivery: moment().add(waitTime, 'minutes'),
-    price: orderTotalPrice,
-    customer: body.customer || null,
-    //Svara användaren
-  })
-    .then(dbRes => res.json(dbRes))
-    .catch(err => {
-      console.error(err)
-      res.status(500).json({
-        status: 'error',
-        error: 'Kunde inte lägga order. Försök igen.',
-      })
+      //Lägg till kostnaden i totalen
+      orderTotalPrice += price * amount
     })
 
-  //Hantera error
+    //Skapa en random väntetid
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+    const waitTime = rand(15, 45)
 
-  // res.json({ coffee: 'yes' })
-
-  const inn = {
-    order: [
-      {
-        id: 1,
-        price: 39,
-        amount: 1,
-      },
-      {
-        id: 3,
-        price: 49,
-        amount: 2,
-      },
-    ],
+    //Spara till DB
+    CreateOrder({
+      type: 'order',
+      delivery: moment().add(waitTime, 'minutes'),
+      price: orderTotalPrice,
+      customer: body.customer || null,
+    })
+      //Svara användaren
+      .then(dbRes => {
+        res.json({
+          status: 'success',
+          orderNum: dbRes._id,
+          eta: calculateEta(dbRes.delivery),
+        })
+      })
+      //Fånga och skicka vidare fel
+      .catch(err => {
+        console.error(err)
+        throw {
+          status: 500,
+          message: 'Kunde inte lägga order. Försök igen.',
+        }
+      })
+    //Hantera alla error på ett ställe
+  } catch (error) {
+    console.error(error)
+    res.status(error.status).json({
+      status: 'error',
+      error: error.message,
+    })
   }
-
-  // const dbEntry = {
-  //   type: 'order',
-  //   delivery: '2024T11:40:00',
-  //   price: 123,
-  //   customer: 'xxx',
-  // }
 }
 
 module.exports = { CheckOrderId, PlaceCoffeeOrder }

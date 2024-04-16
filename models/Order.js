@@ -2,9 +2,7 @@ const nedb = require('nedb-promise')
 const db = new nedb({ filename: 'database.db', autoload: true })
 
 const GetOrderByID = async id => {
-  // const dbEntry = await db.findOne({ _id: id })
-  const dbEntry = await db.find({ type: 'order', customer: 'abc123' })
-  console.log(dbEntry)
+  const dbEntry = await db.findOne({ _id: id })
   return dbEntry
 }
 
@@ -143,7 +141,7 @@ app.get('/', async (req, res) => {
   //type: 'menu' - type: 'user', - type: 'order'
   const dbRes = await db.find({ type: 'menu' })
 
-  console.log(dbRes)
+  console.(dbRes)
   res.send(dbRes)
 })
   */
