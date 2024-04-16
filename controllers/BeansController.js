@@ -1,4 +1,4 @@
-const { GetOrderByID, CreateOrder } = require('../models/OrderModel')
+const { GetOrderByID, CreateOrder } = require('../models/orderModel')
 const moment = require('moment')
 moment.locale('sv')
 
