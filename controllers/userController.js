@@ -1,49 +1,37 @@
-const User = require('../models/userModel')
+const Order = require('../models/OrderModel')
 
+// exports.placeOrder = async (req, res) => {
 
+//     // Från frontend...
+//     // const orderData = {
+//     //     userID: "123ABC"
+//     //     products: [
+//     //         {productID: 1, quantity: 1, price: 49},
+//     //         {productID: 2, quantity: 2, price: 49}
+//     //     ],
+//     // }
 
-exports.registerUser = async (req, res) => {
+//     try {
+//         const orderData = req.body
+//         const insertOrder = await Order.placeOrder(orderData)
+//         return res.status(201).json({success: true, order: insertOrder})
+//     } catch (error) {
+//         console.error("Error when placing an order", error)
+//         return res.status(500).json({success: false, message: "Failed to place en order"})
+//     }
+// }
 
+exports.getOrderHistory = async (req, res) => {
   try {
-    const { username, password } = req.body
-    const user = await User.findUserByUsername(username);
+    const userID = req.params.userID
 
-    if (user) {
-      return res.status(409).send({ error: 'Username already exists' })
-    }
+    const orderHistory = await Order.getOrderHistory(userID)
 
-    await User.createUser(username, password)
-    res.status(201).send({ message: 'User created successfully' })
-
+    return res.status(200).json({ success: true, orderHistory: orderHistory })
   } catch (error) {
-    res.status(500).send({ error: 'Internal server error' })
+    console.error('Error retrieving orders', error)
+    return res
+      .status(500)
+      .json({ success: false, message: 'Error retrieving orders' })
   }
-
-}
-
-
-
-
-exports.loginUser = async (req, res) => {
-
-  const { username, password } = req.body
-  
-  try {
-    const user = await User.findUserByUsername(username);
-
-    if (!user) {
-      return res.status(404).send({ error: 'User not found' })
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password)
-
-    if (!isMatch) {
-      return res.status(401).send({ error: 'Invalid credentials' })
-    }
-    res.send({ message: 'Logged in successfully' })
-
-  } catch (error) {
-    res.status(500).send({ error: 'Internal server error' })
-  }
-
 }
