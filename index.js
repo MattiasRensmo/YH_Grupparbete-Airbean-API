@@ -1,14 +1,16 @@
-// import express from 'express'
 const express = require('express')
-const beans = require('./Routes/Beans')
+const beans = require('./Routes/Beans') //Mattias
+const orderRoutes = require('./Routes/orderRoutes') //Kristofer
 
 const app = express()
-const PORT = 5000
+const PORT = 8000
 
 app.use(express.json())
 
+app.use('/api', orderRoutes) //Kristofer
+
 // ROUTES
-app.use('/api/beans', beans)
+app.use('/api/beans', beans) //Mattias
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', (req, res) => {
