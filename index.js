@@ -1,13 +1,13 @@
 const express = require('express')
 const beans = require('./Routes/Beans') //Mattias
-const orderRoutes = require('./Routes/orderRoutes') //Kristofer
+const user = require('./Routes/User') //Kristofer
 
 const app = express()
-const PORT = 8000
+const PORT = 5000
 
 app.use(express.json())
 
-app.use('/api', orderRoutes) //Kristofer
+app.use('/api/user', user) //Kristofer
 
 // ROUTES
 app.use('/api/beans', beans) //Mattias
