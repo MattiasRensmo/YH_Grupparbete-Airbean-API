@@ -1,5 +1,3 @@
-const Datastore = require('nedb-promise')
-// const db = new Datastore({ filename: './database/database.db', autoload: true })
 const db = require('../database/database')
 const bcrypt = require('bcrypt')
 

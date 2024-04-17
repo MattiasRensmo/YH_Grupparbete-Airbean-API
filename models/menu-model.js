@@ -27,7 +27,6 @@ exports.getProduct = async (productId) => {
       console.error('Produkten hittades inte')
       return null
     }
-
     return menuItem
   } catch (error) {
     console.error('Error fetching product:', error)

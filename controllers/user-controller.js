@@ -1,12 +1,17 @@
 const Order = require('../models/order-model')
-const User = require('../models/userModel')
+const User = require('../models/user-model')
 const bcrypt = require('bcrypt')
 
 exports.getOrderHistory = async (req, res) => {
   try {
     const userID = req.params.userID
-
     const orderHistory = await Order.getOrderHistory(userID)
+
+    if (!orderHistory) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'No orders found' })
+    }
 
     return res.status(200).json({ success: true, orderHistory: orderHistory })
   } catch (error) {
@@ -46,7 +51,6 @@ exports.loginUser = async (req, res) => {
     if (!user) {
       return res.status(404).send({ error: 'User not found' })
     }
-    // TODO SKa vi fortsätta ha Bcrypt
     const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {

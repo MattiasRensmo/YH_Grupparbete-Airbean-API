@@ -18,7 +18,9 @@ router.get('/:id', getProductById)
 
 //Lägg till produkt(er)
 router.post('/', addProduct)
+
 // Uppdatera produkt
+//TODO Fixa eller ta bort det helt?
 
 //Radera produkt
 router.delete('/:id', deleteProduct)

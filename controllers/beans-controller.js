@@ -114,36 +114,39 @@ PlaceCoffeeOrder = (req, res) => {
     }
 
     // Är varje produkt i ordern korrekt?
-    body.order.forEach(async (item) => {
-      try {
-        const { id, price, amount } = item
+    body.order.forEach((item) => {
+      const { id, price, amount } = item
 
-        //TODO Skapa funktionen GetMenuItemById
-        const menuItem = await getProduct(id)
-
-        console.log(menuItem)
-        //Finns produkten i menyn?
-        if (!menuItem) {
-          throw {
-            status: 404,
-            message: 'Du kan bara beställa från menyn!',
+      //FIXME Fixa så det inte kraschar om vi beställer ngt som inte finns.
+      // const menuItem =
+      getProduct(id)
+        .then((menuItem) => {
+          console.log(menuItem)
+          //Finns produkten i menyn?
+          if (!menuItem) {
+            throw {
+              status: 404,
+              message: 'Du kan bara beställa från menyn!',
+            }
           }
-        }
 
-        //Har produkten rätt pris
-        if (menuItem.price != price) {
-          throw {
-            status: 400,
-            message: 'Fuska inte med priset!',
+          //Har produkten rätt pris
+          if (menuItem.price != price) {
+            throw {
+              status: 400,
+              message: 'Fuska inte med priset!',
+            }
           }
-        }
 
-        //Lägg till kostnaden i totalen
-        orderTotalPrice += price * amount
-      } catch (error) {
-        console.log(error)
-        throw error
-      }
+          //Lägg till kostnaden i totalen
+          orderTotalPrice += price * amount
+        })
+        .catch((error) => {
+          console.log('Error i foreach', error)
+          throw error
+        })
+
+      // }
     })
 
     //Skapa en random väntetid
