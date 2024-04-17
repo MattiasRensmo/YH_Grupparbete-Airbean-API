@@ -126,7 +126,6 @@ JSON
 
 ```
 {
-  "fullName": "Mattias Rensmo"
   "username": "mattias@rensmo.se",
   "password": "losen"
 }
@@ -199,7 +198,7 @@ JSON
 
 ## Get order history
 
-- `/api/user/history`
+- `/api/user/5w4kljh234k/history`
 - METHOD: GET
 - UID: "5w4kljh234k"
 

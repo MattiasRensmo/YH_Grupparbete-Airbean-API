@@ -1,5 +1,6 @@
-const Order = require('../models/OrderModel')
+const Order = require('../models/order-model')
 const User = require('../models/userModel')
+const bcrypt = require('bcrypt')
 
 exports.getOrderHistory = async (req, res) => {
   try {
@@ -25,8 +26,12 @@ exports.registerUser = async (req, res) => {
       return res.status(409).send({ error: 'Username already exists' })
     }
 
-    await User.createUser(username, password)
-    res.status(201).send({ message: 'User created successfully' })
+    const newUser = await User.createUser(username, password)
+    res.status(201).send({
+      message: 'User created successfully',
+      status: 'success',
+      UID: newUser._id,
+    })
   } catch (error) {
     res.status(500).send({ error: 'Internal server error' })
   }
@@ -49,6 +54,7 @@ exports.loginUser = async (req, res) => {
     }
     res.send({ message: 'Logged in successfully' })
   } catch (error) {
+    console.log(error)
     res.status(500).send({ error: 'Internal server error' })
   }
 }

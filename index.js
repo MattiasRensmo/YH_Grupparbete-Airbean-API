@@ -11,9 +11,9 @@ app.use(express.json())
 // ROUTES
 app.use('/api/beans', beans) //Mattias
 app.use('/api/user', userRoutes) //Kristofer
+app.use('/api', orderRoutes) //Joel ??????????????????????
 
 // app.use('/api/user', userRoutes) //Joel
-app.use('/api', orderRoutes) //Joel
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', (req, res) => {
