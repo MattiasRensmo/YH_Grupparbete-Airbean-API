@@ -8,7 +8,6 @@ async function applyPromotion(checkout) {
     const menu = await db.find({ type: "menu" });
     const combosData = await db.findOne({ "combos.type": "combos" });
     const combos = combosData.combos;
-console.log(combos); 
 
     const menuProducts = menu;
 
@@ -101,9 +100,6 @@ function calculateTotalComboDiscount(productQuantities, combos) {
   }
   return totalComboDiscount;
 }
-
-
-
 
 function calculateDiscountedPrice(price) {
   const discount = price * 0.1; // 10%
