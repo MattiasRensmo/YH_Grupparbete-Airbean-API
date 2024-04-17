@@ -1,0 +1,62 @@
+[
+  {
+    "type": "menu",
+    "id": 1,
+    "title": "Bryggkaffe",
+    "desc": "Bryggd på månadens bönor.",
+    "price": 39,
+    "activePromotion": false,
+    "combo": [],
+    "discountedPrice": null
+  },
+  {
+    "type": "menu",
+    "id": 2,
+    "title": "Caffè Doppio",
+    "desc": "Bryggd på månadens bönor.",
+    "price": 49,
+    "activePromotion": false,
+    "combo": [],
+    "discountedPrice": null
+  },
+  {
+    "type": "menu",
+    "id": 3,
+    "title": "Cappuccino",
+    "desc": "Bryggd på månadens bönor.",
+    "price": 49,
+    "activePromotion": false,
+    "combo": [],
+    "discountedPrice": null
+  },
+  {
+    "type": "menu",
+    "id": 4,
+    "title": "Latte Macchiato",
+    "desc": "Bryggd på månadens bönor.",
+    "price": 49,
+    "activePromotion": false,
+    "combo": [],
+    "discountedPrice": null
+  },
+  {
+    "type": "menu",
+    "id": 5,
+    "title": "Kaffe Latte",
+    "desc": "Bryggd på månadens bönor.",
+    "price": 54,
+    "activePromotion": false,
+    "combo": [],
+    "discountedPrice": null
+  },
+  {
+    "type": "menu",
+    "id": 6,
+    "title": "Cortado",
+    "desc": "Bryggd på månadens bönor.",
+    "price": 39,
+    "activePromotion": false,
+    "combo": [],
+    "discountedPrice": null
+  }
+]

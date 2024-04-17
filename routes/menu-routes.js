@@ -1,6 +1,26 @@
-const {getAllMenuItems, getProductById } = require("../controllers/menu-controller");
+const {
+  getAllMenuItems,
+  getProductById,
+  addProduct,
+  deleteProduct,
+} = require('../controllers/menu-controller')
 
-exports.registerMenuRoutes = (app) => {
-  app.get("/beans", getAllMenuItems);
-  app.get("/beans/:id", getProductById);
-};
+const express = require('express')
+const router = express.Router()
+
+// Base: '/api/menu'
+
+//Visa hela menyn
+router.get('/', getAllMenuItems)
+
+//Visa en produkt
+router.get('/:id', getProductById)
+
+//Lägg till produkt(er)
+router.post('/', addProduct)
+// Uppdatera produkt
+
+//Radera produkt
+router.delete('/:id', deleteProduct)
+
+module.exports = router

@@ -1,35 +1,43 @@
-const nedb = require("nedb-promise");
-const db = new nedb({ filename: "database.db", autoload: true });
+const nedb = require('nedb-promise')
+// const db = new nedb({ filename: "database.db", autoload: true });
+const db = require('../database/database')
 
 exports.getMenu = async () => {
   try {
-    const menu = await db.findOne({ type: "menu" });
-    const menuProducts = menu.menu;
+    const menu = await db.find({ type: 'menu' })
+    console.log(menu)
+    const menuProducts = menu
 
     if (!menuProducts) {
-      console.error("Menyn hittades inte");
-      throw new Error("Menyn hittades inte");
+      console.error('Menyn hittades inte')
+      throw new Error('Menyn hittades inte')
     }
-    return menuProducts;
+    return menuProducts
   } catch (error) {
-    console.error("Error fetching menu:", error);
-    throw error;
+    console.error('Error fetching menu:', error)
+    throw error
   }
-};
+}
 
 exports.getProduct = async (productId) => {
   try {
-    const menu = await db.findOne({ type: "menu" });
-    const menuProducts = menu.menu;
+    const menuItem = await db.findOne({ type: 'menu', id: +productId })
 
-    if (!menuProducts) {
-      console.error("Produkten hittades inte");
-      return null;
+    if (!menuItem) {
+      console.error('Produkten hittades inte')
+      return null
     }
-    const product = menuProducts.find((product) => product.id == productId);
-    return product;
+
+    return menuItem
   } catch (error) {
-    console.error("Error fetching product:", error);
-    throw error;
+    console.error('Error fetching product:', error)
+    throw error
   }
-};
+}
+
+exports.addItemsToDb = async (newItems) => {
+  const dbRes = await db.insert(newItems)
+  return dbRes
+}
+
+exports.deleteItemFromDb = async (id) => db.remove({ _id: id })

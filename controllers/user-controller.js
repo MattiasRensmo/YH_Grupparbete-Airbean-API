@@ -52,7 +52,11 @@ exports.loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(401).send({ error: 'Invalid credentials' })
     }
-    res.send({ message: 'Logged in successfully' })
+    res.send({
+      message: 'Logged in successfully',
+      status: 'success',
+      UID: user._id,
+    })
   } catch (error) {
     console.log(error)
     res.status(500).send({ error: 'Internal server error' })
