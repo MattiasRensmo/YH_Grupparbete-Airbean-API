@@ -225,27 +225,3 @@ JSON
   "error": "Du är inte inloggad"
 }
 ```
-
-<!--
-## Check JWT
-
-- `/api/user/status`
-- METHOD: GET
-- AUTH: JWT
-
-### SUCCESS: JSON
-
-```
-{
-  "status": "success"
-}
-```
-
-### ERROR
-
-```
-{
-  "status": "error"
-  "error": "Token är inte giltig"
-}
-``` -->
