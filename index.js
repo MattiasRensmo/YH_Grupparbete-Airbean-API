@@ -5,6 +5,8 @@ const PORT = 5000
 const beans = require('./routes/beans-routes') //Mattias
 const orderRoutes = require('./routes/order-routes')
 const userRoutes = require('./routes/user-routes')
+const { registerMenuRoutes } = require('./routes/menuRoutes')
+const { registerPromotionRoutes } = require('./routes/applyPromotionRoutes')
 
 app.use(express.json())
 
