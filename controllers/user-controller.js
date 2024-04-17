@@ -7,7 +7,7 @@ exports.getOrderHistory = async (req, res) => {
     const userID = req.params.userID
     const orderHistory = await Order.getOrderHistory(userID)
 
-    if (!orderHistory) {
+    if (!orderHistory || orderHistory.length === 0) {
       return res
         .status(404)
         .json({ success: false, message: 'No orders found' })
