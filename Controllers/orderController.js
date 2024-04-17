@@ -1,5 +1,5 @@
 
-const Order = require("../Models/Order")
+const Order = require("../Models/orderModel")
 
 exports.placeOrder = async (req, res) => {
     
