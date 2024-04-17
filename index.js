@@ -5,7 +5,7 @@ const PORT = 5000
 const beans = require('./routes/beans-routes') //Mattias
 const userRoutes = require('./routes/user-routes')
 const menuRoutes = require('./routes/menu-routes')
-const promotionRoutes = require('./routes/promotion-routes')
+// const promotionRoutes = require('./routes/promotion-routes')
 
 app.use(express.json())
 
@@ -13,7 +13,7 @@ app.use(express.json())
 app.use('/api/beans', beans) //Mattias
 app.use('/api/menu', menuRoutes)
 app.use('/api/user', userRoutes) //Kristofer
-app.use('/api/promotion', promotionRoutes)
+// app.use('/api/promotion', promotionRoutes)
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', (req, res) => {
