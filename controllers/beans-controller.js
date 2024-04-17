@@ -5,7 +5,11 @@ const { getProduct } = require('../models/menu-model')
 const moment = require('moment')
 moment.locale('sv')
 
-//Allmänna funktioner
+// #--- Allmänna funktioner ---#
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 function calculateEta(etaTime) {
   if (moment(etaTime).isAfter()) {
     return moment(etaTime).fromNow()
@@ -13,50 +17,14 @@ function calculateEta(etaTime) {
   return 'Kaffet är levererat'
 }
 
-// // FIXME Tillfällig funktion
-// function GetMenuItemById(id) {
-//   const menu = [
-//     {
-//       id: 1,
-//       title: 'Bryggkaffe',
-//       desc: 'Bryggd på månadens bönor.',
-//       price: 39,
-//     },
-//     {
-//       id: 2,
-//       title: 'Caffè Doppio',
-//       desc: 'Bryggd på månadens bönor.',
-//       price: 49,
-//     },
-//     {
-//       id: 3,
-//       title: 'Cappuccino',
-//       desc: 'Bryggd på månadens bönor.',
-//       price: 49,
-//     },
-//     {
-//       id: 4,
-//       title: 'Latte Macchiato',
-//       desc: 'Bryggd på månadens bönor.',
-//       price: 49,
-//     },
-//     {
-//       id: 5,
-//       title: 'Kaffe Latte',
-//       desc: 'Bryggd på månadens bönor.',
-//       price: 54,
-//     },
-//     {
-//       id: 6,
-//       title: 'Cortado',
-//       desc: 'Bryggd på månadens bönor.',
-//       price: 39,
-//     },
-//   ]
-//   const idx = menu.findIndex(item => item.id == id)
-//   if (idx == -1) return undefined
-//   return menu[idx]
-// }
+function handleError([status, message], res = undefined) {
+  console.error('Error:', status, message)
+  if (res)
+    res.status(status).json({
+      status: 'error',
+      error: message,
+    })
+}
 
 CheckOrderId = async (req, res) => {
   const id = req.params.orderId
@@ -79,7 +47,6 @@ CheckOrderId = async (req, res) => {
     }
     res.json({
       orderNum: data._id,
-      // eta: moment(data.delivery).fromNow(),
       eta: calculateEta(data.delivery),
     })
   } catch (error) {
@@ -92,67 +59,37 @@ CheckOrderId = async (req, res) => {
   }
 }
 
-PlaceCoffeeOrder = (req, res) => {
-  const body = req.body
-
+PlaceCoffeeOrder = async (req, res) => {
   let orderTotalPrice = 0
 
   try {
     //Har vi fått en order?
-    if (!('order' in body)) {
-      throw {
-        status: 400,
-        message: 'Formatera din beställning rätt!',
-      }
-    }
+    if (!('order' in req.body))
+      return handleError([400, 'Formatera din beställning rätt!'], res)
+
+    const { order, customer } = req.body
+
     //Finns det produkter i ordern?
-    if (body.order.length < 1) {
-      throw {
-        status: 400,
-        message: 'Du måste beställa något!',
-      }
+    if (order < 1) return handleError([400, 'Du måste beställa något!'], res)
+
+    // Vi går igenom varje produkt i en klassisk for-loop för att enkelt kunna bryta oss ut med en return
+    for (let i = 0; i < order.length; i++) {
+      const { id, price, amount } = order[i]
+      const menuItem = await getProduct(id)
+
+      //Finns den beställda produkten på menyn?
+      if (!menuItem)
+        return handleError([404, 'Du kan bara beställa från menyn!'], res)
+
+      //Har produkten rätt pris
+      if (menuItem.price != price)
+        return handleError([400, 'Fuska inte med priset!'], res)
+
+      //Lägg till kostnaden i totalen
+      orderTotalPrice += price * amount
     }
-
-    // Är varje produkt i ordern korrekt?
-    body.order.forEach((item) => {
-      const { id, price, amount } = item
-
-      //FIXME Fixa så det inte kraschar om vi beställer ngt som inte finns.
-      // const menuItem =
-      getProduct(id)
-        .then((menuItem) => {
-          console.log(menuItem)
-          //Finns produkten i menyn?
-          if (!menuItem) {
-            throw {
-              status: 404,
-              message: 'Du kan bara beställa från menyn!',
-            }
-          }
-
-          //Har produkten rätt pris
-          if (menuItem.price != price) {
-            throw {
-              status: 400,
-              message: 'Fuska inte med priset!',
-            }
-          }
-
-          //Lägg till kostnaden i totalen
-          orderTotalPrice += price * amount
-        })
-        .catch((error) => {
-          console.log('Error i foreach', error)
-          throw error
-        })
-
-      // }
-    })
 
     //Skapa en random väntetid
-    function rand(min, max) {
-      return Math.floor(Math.random() * (max - min + 1) + min)
-    }
     const waitTime = rand(15, 45)
 
     //Spara till DB
@@ -161,7 +98,7 @@ PlaceCoffeeOrder = (req, res) => {
       delivery: moment().add(waitTime, 'minutes'),
       orderDate: moment().format('YYYY-MM-DD'),
       price: orderTotalPrice,
-      customer: body.customer || null,
+      customer: customer || null,
     })
       //Svara användaren
       .then((dbRes) => {
@@ -179,6 +116,7 @@ PlaceCoffeeOrder = (req, res) => {
           message: 'Kunde inte lägga order. Försök igen.',
         }
       })
+
     //Hantera alla error på ett ställe
   } catch (error) {
     console.error(error)

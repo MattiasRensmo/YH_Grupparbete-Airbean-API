@@ -53,10 +53,22 @@ exports.addProduct = async (req, res) => {
     if (newItems.length < 1) {
       throw {
         status: 400,
-        message: 'Du måste beställa något!',
+        message: 'Det finns inga produkter i ordern',
       }
     }
-    // TODO KOlla att alla fält som ska finnas finns.....
+
+    for (const menuItem of newItems) {
+      const requiredFields = ['type', 'id', 'title', 'desc', 'price']
+
+      const isValid = requiredFields.every((field) =>
+        Object.keys(menuItem).includes(field)
+      )
+      if (!isValid)
+        throw {
+          status: 400,
+          message: 'Data är felformaterad',
+        }
+    }
 
     const dbRes = await addItemsToDb(newItems)
     res.status(200).json(dbRes)
@@ -88,16 +100,4 @@ exports.deleteProduct = async (req, res) => {
       error: error.message,
     })
   }
-}
-
-const menu = {
-  type: 'menu',
-  id: 1,
-  title: 'Bryggkaffe',
-  desc: 'Bryggd på månadens bönor.',
-  price: 39,
-  activePromotion: false,
-  combo: [],
-  discountedPrice: null,
-  _id: 'xpoLZjEDFTRN0D5u',
 }

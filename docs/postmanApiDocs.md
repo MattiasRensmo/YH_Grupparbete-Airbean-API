@@ -4,8 +4,6 @@ Kristofer Almeros, Joel Keskitalo, Emanuele De Negri, Mattias Rensmo
 
 ## API Docs
 
-(Genererade från Postman)
-
 ### GET
 
 Check Order Status
