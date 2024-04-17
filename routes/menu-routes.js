@@ -1,4 +1,4 @@
-const {getAllMenuItems, getProductById } = require("../controllers/menuController");
+const {getAllMenuItems, getProductById } = require("../controllers/menu-controller");
 
 exports.registerMenuRoutes = (app) => {
   app.get("/beans", getAllMenuItems);

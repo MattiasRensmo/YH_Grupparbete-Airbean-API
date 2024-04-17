@@ -1,4 +1,4 @@
-const { applyPromotion } = require("../models/applyPromotionModel");
+const { applyPromotion } = require("../models/applyPromotion-model");
 
 
 exports.useApplyPromotion = async (req, res) => {
@@ -22,6 +22,8 @@ exports.useApplyPromotion = async (req, res) => {
   /*---- för att fungera---- */
 //lägg till "combo"-nyckeln till produkterna (t.ex. "combo" : [3, 4] eller [])
 //lägg till activePromotion=true (eller false)
+
+  /*---- för att bli efektiv i API:et---- */
 //endpoint /order accepterar discountedPrice om "promotionApplied": true (måste bli accepterad som body parameter)
 
   /*--------- best of the best if----- */
