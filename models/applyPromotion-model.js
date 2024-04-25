@@ -47,10 +47,7 @@ function checkQuantities(checkout) {
 
 /*--------------------------------- QUANTITY PROMOTION----------------------------- */
 
-//Checks through the products and defines if they are elegible for the promoton
-//If is elegible, calculates discunt price otherwise keeps the original price
-//Adds the processed product to the array processedProduct (if it doesn not already exist)
-//Returns the array
+
 function processProducts(checkout, menuProducts, promotionRules, productQuantities) {
   const processedProducts = [];
   for (const product of checkout) {
@@ -74,9 +71,7 @@ function processProducts(checkout, menuProducts, promotionRules, productQuantiti
   return processedProducts;
 }
 
-//Checks and returns if the product exists in the checkout
-//if its promotion is active
-//if the quantity rules are satisfied
+
 function isProductEligibleForPromotion(menuProduct, promotionRules, quantity) {
   return (
     menuProduct &&
@@ -87,9 +82,6 @@ function isProductEligibleForPromotion(menuProduct, promotionRules, quantity) {
 
 /*--------------------------------- COMBO DISCOUNT----------------------------- */
 
-//Checks in the combos (menu.combos) and gets list of the combos products
-//Checks the min. quantity existing in the checkout
-//Accumulate the total discount based on the number of combos closed
 function calculateTotalComboDiscount(productQuantities, combos) {
   let totalComboDiscount = 0;
   for (const combo of combos) {

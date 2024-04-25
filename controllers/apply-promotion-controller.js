@@ -19,13 +19,3 @@ exports.useApplyPromotion = async (req, res) => {
 
 
 
-/*---- för att fungera---- */
-//lägg till "combo"-nyckeln till produkterna (t.ex. "combo" : [3, 4] eller [])
-//lägg till activePromotion=true (eller false)
-
-/*---- för att bli efektiv i API:et---- */
-//endpoint /order accepterar discountedPrice om "promotionApplied": true (måste bli accepterad som body parameter)
-
-/*--------- best of the best if----- */
-//order accepteras som frivilliga parameter i body:n även totalDiscount
-//orderHistorik accepteras som frivilliga parameter i body:n även totalDiscount
